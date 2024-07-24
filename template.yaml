@@ -92,8 +92,8 @@ Resources:
 #      ProviderType: 'Facebook'
 #      UserPoolId: !Ref UserPool
 #      ProviderDetails:
-#        client_id: '802170752062209' # Update with your Facebook App ID
-#        client_secret: 'b979ad4cb8e137dbf979439687364d58' # Update with your Facebook App Secret
+#        client_id: '' # Update with your Facebook App ID
+#        client_secret: '' # Update with your Facebook App Secret
 #        authorize_scopes: 'email,public_profile'
 #
 #  GoogleIdentityProvider:
@@ -103,8 +103,8 @@ Resources:
 #      ProviderType: 'Google'
 #      UserPoolId: !Ref UserPool
 #      ProviderDetails:
-#        client_id: '790596353502-qa8pvjk9vmaobd36s0vktqgadth6l6o0.apps.googleusercontent.com' # Update with your Google Client ID
-#        client_secret: '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' # Update with your Google Client Secret
+#        client_id: '' # Update with your Google Client ID
+#        client_secret: '' # Update with your Google Client Secret
 #        authorize_scopes: 'openid email profile'
 
   UserServiceLibApi:
