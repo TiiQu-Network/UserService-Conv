@@ -1,23 +1,20 @@
 openapi: "3.0.1"
 info:
-  title: "UserServiceLibApi"
+  title: "UserServiceConvApi"
   version: "1.0"
 servers:
-  - url: "https://m2b6kfkpa2.execute-api.eu-west-2.amazonaws.com/{basePath}"
+  - url: "https://7dg5xa2lpb.execute-api.eu-west-2.amazonaws.com/{basePath}"
     variables:
       basePath:
-        default: "Prod"
+        default: "Dev"
 paths:
-  /users/signup:
+  /users/send-verification-code:
     post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-SendVerificationCodeConvHandlerFu-qXqy1UZ2otd8/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -29,22 +26,37 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
-            Access-Control-Allow-Headers:
+            Access-Control-Max-Age:
               schema:
                 type: "string"
-          content: {}
-  /users/remove-from-group:
-    post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
+            Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
       security:
         - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /users/signup:
+    post:
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-SignupUserConvHandlerFunction-FmkVVh4HsYjW/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -56,10 +68,116 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /users/remove-from-group:
+    post:
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-RemoveUserFromGroupConvHandlerFun-jZqcqmGD5whI/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /users/confirm-forgot-password:
+    post:
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-ConfirmForgotPasswordConvHandlerF-vdSPtYeTHZ6f/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /users/me:
     get:
       parameters:
@@ -68,17 +186,27 @@ paths:
           required: true
           schema:
             type: "string"
-    post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content: {}
       security:
         - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-GetUserConvHandlerFunction-sIqPrIOfFTZk/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    post:
+      parameters:
+        - name: "AccessToken"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-UpdateUserConvHandlerHandlerFunct-ssRPgPUsVrk0/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -90,20 +218,79 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /users/forgot-password:
+    post:
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-ForgotPasswordConvHandlerFunction-FUy0BcSmL4ao/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /users/confirm:
     post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-ConfirmUserConvHandlerFunction-lhcSg9veMVVP/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -115,22 +302,89 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /users/me/delete:
+    get:
+      parameters:
+        - name: "AccessToken"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-DeleteUserConvHandlerFunction-UQQt5imgduVI/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /users/add-to-group:
     post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content: {}
       security:
         - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-AddUserToGroupConvHandlerFunction-jfw1vIvmCyya/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -142,74 +396,81 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
-            Access-Control-Allow-Headers:
+            Access-Control-Max-Age:
               schema:
                 type: "string"
-          content: {}
-  /users/me/delete:
-    post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
+            Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
       security:
         - CognitoAuthorizer: []
-    options:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-            Access-Control-Allow-Methods:
-              schema:
-                type: "string"
-            Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content: {}
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /users/list:
     get:
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-GetUsersConvHandlerFunction-odarCE4tQwBx/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+    options:
       responses:
         "200":
           description: "200 response"
           headers:
             Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
       security:
         - CognitoAuthorizer: []
-    options:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-            Access-Control-Allow-Methods:
-              schema:
-                type: "string"
-            Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content: {}
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   /users/login:
     post:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content: {}
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:109607957842:function:userservice-conv-LoginUserConvHandlerFunction-E4iDMsZbrVn1/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
     options:
       responses:
         "200":
@@ -221,10 +482,30 @@ paths:
             Access-Control-Allow-Methods:
               schema:
                 type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
           content: {}
+      security:
+        - CognitoAuthorizer: []
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'600'"
+              method.response.header.Access-Control-Allow-Methods: "'POST, GET'"
+              method.response.header.Access-Control-Allow-Headers: "'X-Forwarded-For,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,AccessToken'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
 components:
   securitySchemes:
     CognitoAuthorizer:
@@ -232,3 +513,7 @@ components:
       name: "Authorization"
       in: "header"
       x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+          - "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
+        type: "cognito_user_pools"
