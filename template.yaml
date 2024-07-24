@@ -85,6 +85,28 @@ Resources:
         - aws.cognito.signin.user.admin
 #      AllowedOAuthFlowsUserPoolClient: true
 
+#  FacebookIdentityProvider:
+#    Type: 'AWS::Cognito::UserPoolIdentityProvider'
+#    Properties:
+#      ProviderName: 'Facebook'
+#      ProviderType: 'Facebook'
+#      UserPoolId: !Ref UserPool
+#      ProviderDetails:
+#        client_id: '' # Update with your Facebook App ID
+#        client_secret: '' # Update with your Facebook App Secret
+#        authorize_scopes: 'email,public_profile'
+#
+#  GoogleIdentityProvider:
+#    Type: 'AWS::Cognito::UserPoolIdentityProvider'
+#    Properties:
+#      ProviderName: 'Google'
+#      ProviderType: 'Google'
+#      UserPoolId: !Ref UserPool
+#      ProviderDetails:
+#        client_id: '' # Update with your Google Client ID
+#        client_secret: '' # Update with your Google Client Secret
+#        authorize_scopes: 'openid email profile'
+
   UserServiceLibApi:
     Type: AWS::Serverless::Api
     Properties:
