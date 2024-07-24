@@ -14,9 +14,9 @@ Globals:
     - x86_64
     Environment:
       Variables:
-        COGNITO_POOL_APP_CLIENT_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QGb3lF2DT2M6xFqaSfvjBreAAAAeTB3BgkqhkiG9w0BBwagajBoAgEAMGMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMOYL253xNWq/cGMQmAgEQgDYcNAQ3tWC5TAy9Hs65Lq4Yn2+jACZlgGAAKJXQqp7H4h20vLFS3XAsSnavhiBfbpgBfG8lU8w=
-        COGNITO_POOL_APP_CLIENT_SECRET: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QEXr5UctUCk4SWsLmee24v3AAAAlTCBkgYJKoZIhvcNAQcGoIGEMIGBAgEAMHwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMHfsoWZi7Rv6soO5lAgEQgE//IYyFkzNto/NiuuYQGuEHLZ0jLNd8zpUK7519UN1Bx7TcPTH/dHt+eKOx2lL5bWTehVUSh/fCZodIW4hGaYsawmSkPrbLq+ubqb4yDi4U
-        COGNITO_USER_POOL_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QG8mTSaJUul5h5tXAhrnejqAAAAcjBwBgkqhkiG9w0BBwagYzBhAgEAMFwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMXpnC0vL5Pn044rFSAgEQgC91GoNd9dNSe4+doFBYq3h/WnMMF8RCOnzsyAf7CHBMj2IQmf1YqEOizyP9WJmXGg==
+        COGNITO_POOL_APP_CLIENT_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QFDwfhjXVwoX/nvmJ3SQDMnAAAAeDB2BgkqhkiG9w0BBwagaTBnAgEAMGIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMRV2Q/CSSL1dKV7BHAgEQgDVbh4CygboOqgjjNvSxBWvGKPXnKJseK8futhY1soD8E5e0hHoirQp4PlgX0yjxdBq+nu4Dqg==
+        COGNITO_POOL_APP_CLIENT_SECRET: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QGC8MGrAiu6Hob/xoB6XW4QAAAAljCBkwYJKoZIhvcNAQcGoIGFMIGCAgEAMH0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMPm3IYIZYRZCZNrUcAgEQgFBQ96sJD3923jOl9OhLTGSgB4BxRNcZE61SMIdEHtwcOZcsXa4qqV/EXWHp92Q528dj1z0FbPfyzZoAULlWlSDSGIxQ0oidZZRGJFUQcF5s5A==
+        COGNITO_USER_POOL_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QFOm+ggw+oNHHhoRH3NqAY4AAAAcjBwBgkqhkiG9w0BBwagYzBhAgEAMFwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMZxcm66ZkfcNCqb0QAgEQgC/2GjtIms3YYYYE9rtGff3o4MEntB2Im+beNaxBE/HyI0K04WS94HSK3zCMevR3Ww==
         COGNITO_USER_POOL_ADMIN_GROUP: Admins
         COGNITO_USER_POOL_USER_GROUP: Users
     Tracing: Active
@@ -26,7 +26,7 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: user-service-pool-lib
+      UserPoolName: user-service-pool-conv
       UsernameAttributes:
       - email
       AutoVerifiedAttributes:
@@ -51,7 +51,7 @@ Resources:
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: user-service-pool-lib-client
+      ClientName: user-service-pool-conv-client
       UserPoolId:
         Ref: UserPool
       ExplicitAuthFlows:
@@ -72,11 +72,11 @@ Resources:
       - email
       - profile
       - aws.cognito.signin.user.admin
-  UserServiceLibApi:
+  UserServiceConvApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: UserServiceLibApi
-      StageName: Prod
+      Name: UserServiceConvApi
+      StageName: Dev
       TracingEnabled: true
       Cors:
         AllowMethods: '''POST, GET'''
@@ -91,10 +91,10 @@ Resources:
               Fn::GetAtt:
               - UserPool
               - Arn
-  SignupUserLibHandlerFunction:
+  SignupUserConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: SignupUserLibHandlerFunction
+      CodeUri: SignupUserConvHandlerFunction
       Handler: com.qutii.users.SignupUserHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -102,57 +102,57 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:AdminAddUserToGroup
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        CreateUser:
+        CreateConvUser:
           Type: Api
           Properties:
             Path: /users/signup
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: SignupUserLibHandlerFunction
-  ConfirmUserLibHandlerFunction:
+      SamResourceId: SignupUserConvHandlerFunction
+  ConfirmUserConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ConfirmUserLibHandlerFunction
+      CodeUri: ConfirmUserConvHandlerFunction
       Handler: com.qutii.users.ConfirmUserHandler::handleRequest
       Events:
-        ConfirmUser:
+        ConfirmConvUser:
           Type: Api
           Properties:
             Path: /users/confirm
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: ConfirmUserLibHandlerFunction
-  LoginUserLibHandlerFunction:
+      SamResourceId: ConfirmUserConvHandlerFunction
+  LoginUserConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: LoginUserLibHandlerFunction
+      CodeUri: LoginUserConvHandlerFunction
       Handler: com.qutii.users.LoginUserHandler::handleRequest
       Events:
-        LoginUser:
+        LoginConvUser:
           Type: Api
           Properties:
             Path: /users/login
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: LoginUserLibHandlerFunction
-  AddUserToGroupLibHandlerFunction:
+      SamResourceId: LoginUserConvHandlerFunction
+  AddUserToGroupConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: AddUserToGroupLibHandlerFunction
+      CodeUri: AddUserToGroupConvHandlerFunction
       Handler: com.qutii.users.AddUserToGroupHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -160,23 +160,23 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:AdminAddUserToGroup
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        AddUserToGroup:
+        AddConvUserToGroup:
           Type: Api
           Properties:
             Path: /users/add-to-group
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: AddUserToGroupLibHandlerFunction
-  RemoveUserFromGroupLibHandlerFunction:
+      SamResourceId: AddUserToGroupConvHandlerFunction
+  RemoveUserFromGroupConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: RemoveUserFromGroupLibHandlerFunction
+      CodeUri: RemoveUserFromGroupConvHandlerFunction
       Handler: com.qutii.users.RemoveUserFromGroupHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -184,43 +184,43 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:AdminRemoveUserFromGroup
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        RemoveUserFromGroup:
+        RemoveConvUserFromGroup:
           Type: Api
           Properties:
             Path: /users/remove-from-group
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: RemoveUserFromGroupLibHandlerFunction
-  GetUserLibHandlerFunction:
+      SamResourceId: RemoveUserFromGroupConvHandlerFunction
+  GetUserConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: GetUserLibHandlerFunction
+      CodeUri: GetUserConvHandlerFunction
       Handler: com.qutii.users.GetUserHandler::handleRequest
       Events:
-        GetUser:
+        GetConvUser:
           Type: Api
           Properties:
             Path: /users/me
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
             - method.request.header.AccessToken:
                 Required: true
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: GetUserLibHandlerFunction
-  UpdateUserLibHandlerHandlerFunction:
+      SamResourceId: GetUserConvHandlerFunction
+  UpdateUserConvHandlerHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: UpdateUserLibHandlerHandlerFunction
+      CodeUri: UpdateUserConvHandlerHandlerFunction
       Handler: com.qutii.users.UpdateUserHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -228,26 +228,26 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:AdminUpdateUserAttributes
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        RemoveUserFromGroup:
+        RemoveConvUserFromGroup:
           Type: Api
           Properties:
             Path: /users/me
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
             - method.request.header.AccessToken:
                 Required: true
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: UpdateUserLibHandlerHandlerFunction
-  DeleteUserLibHandlerFunction:
+      SamResourceId: UpdateUserConvHandlerHandlerFunction
+  DeleteUserConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: DeleteUserLibHandlerFunction
+      CodeUri: DeleteUserConvHandlerFunction
       Handler: com.qutii.users.DeleteUserHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -255,26 +255,26 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:AdminDeleteUser
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        DeleteUser:
+        DeleteConvUser:
           Type: Api
           Properties:
             Path: /users/me/delete
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
             - method.request.header.AccessToken:
                 Required: true
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: DeleteUserLibHandlerFunction
-  SendVerificationCodeLibHandlerFunction:
+      SamResourceId: DeleteUserConvHandlerFunction
+  SendVerificationCodeConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: SendVerificationCodeLibHandlerFunction
+      CodeUri: SendVerificationCodeConvHandlerFunction
       Handler: com.qutii.users.SendVerificationCodeHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -282,23 +282,23 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:ResendConfirmationCode
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        ReSendVerificationCode:
+        ReSendConvVerificationCode:
           Type: Api
           Properties:
             Path: /users/send-verification-code
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: SendVerificationCodeLibHandlerFunction
-  ForgotPasswordLibHandlerFunction:
+      SamResourceId: SendVerificationCodeConvHandlerFunction
+  ForgotPasswordConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ForgotPasswordLibHandlerFunction
+      CodeUri: ForgotPasswordConvHandlerFunction
       Handler: com.qutii.users.ForgotPasswordHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -306,23 +306,23 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:ForgotPassword
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        ForgotPassword:
+        ForgotConvPassword:
           Type: Api
           Properties:
             Path: /users/forgot-password
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: ForgotPasswordLibHandlerFunction
-  ConfirmForgotPasswordLibHandlerFunction:
+      SamResourceId: ForgotPasswordConvHandlerFunction
+  ConfirmForgotPasswordConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ConfirmForgotPasswordLibHandlerFunction
+      CodeUri: ConfirmForgotPasswordConvHandlerFunction
       Handler: com.qutii.users.ConfirmForgotPasswordHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -330,23 +330,23 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:ConfirmForgotPassword
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        ConfirmForgotPassword:
+        ConfirmConvForgotPassword:
           Type: Api
           Properties:
             Path: /users/confirm-forgot-password
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
     Metadata:
-      SamResourceId: ConfirmForgotPasswordLibHandlerFunction
-  GetUsersLibHandlerFunction:
+      SamResourceId: ConfirmForgotPasswordConvHandlerFunction
+  GetUsersConvHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: GetUsersLibHandlerFunction
+      CodeUri: GetUsersConvHandlerFunction
       Handler: com.qutii.users.GetUsersHandler::handleRequest
       Policies:
       - Version: '2012-10-17'
@@ -354,19 +354,19 @@ Resources:
         - Effect: Allow
           Action:
           - cognito-idp:ListUsers
-          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38
+          Resource: arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604
       Events:
-        GetUsers:
+        GetConvUsers:
           Type: Api
           Properties:
             Path: /users/list
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
     Metadata:
-      SamResourceId: GetUsersLibHandlerFunction
+      SamResourceId: GetUsersConvHandlerFunction
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -381,87 +381,87 @@ Resources:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: true
 Outputs:
-  UserServiceLibApi:
+  UserServiceConvApi:
     Description: API Gateway endpoint URL for Prod stage for User Service function
     Value:
-      Fn::Sub: https://${UserServiceLibApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users
-  SignupUserLibHandlerFunction:
+      Fn::Sub: https://${UserServiceConvApi}.execute-api.${AWS::Region}.amazonaws.com/Dev/users
+  SignupUserConvHandlerFunction:
     Description: Signup Users Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - SignupUserLibHandlerFunction
+      - SignupUserConvHandlerFunction
       - Arn
-  SignupUserLibHandlerFunctionIamRole:
+  SignupUserConvHandlerFunctionIamRole:
     Description: Implicit IAM Role created for Signup function
     Value:
       Fn::GetAtt:
-      - SignupUserLibHandlerFunctionRole
+      - SignupUserConvHandlerFunctionRole
       - Arn
-  ConfirmUserLibHandlerFunction:
+  ConfirmUserConvHandlerFunction:
     Description: Confirm User Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - ConfirmUserLibHandlerFunction
+      - ConfirmUserConvHandlerFunction
       - Arn
-  LoginUserLibHandlerFunction:
+  LoginUserConvHandlerFunction:
     Description: Login User Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - LoginUserLibHandlerFunction
+      - LoginUserConvHandlerFunction
       - Arn
-  AddUserToGroupLibHandlerFunction:
+  AddUserToGroupConvHandlerFunction:
     Description: Add User to Group Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - AddUserToGroupLibHandlerFunction
+      - AddUserToGroupConvHandlerFunction
       - Arn
-  RemoveUserFromGroupLibHandlerFunction:
+  RemoveUserFromGroupConvHandlerFunction:
     Description: Remove User from Group Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - RemoveUserFromGroupLibHandlerFunction
+      - RemoveUserFromGroupConvHandlerFunction
       - Arn
-  GetUserLibHandlerFunction:
+  GetUserConvHandlerFunction:
     Description: Get User Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - GetUserLibHandlerFunction
+      - GetUserConvHandlerFunction
       - Arn
-  GetUsersLibHandlerFunction:
+  GetUsersConvHandlerFunction:
     Description: Get Users Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - GetUsersLibHandlerFunction
+      - GetUsersConvHandlerFunction
       - Arn
-  UpdateUserLibHandlerHandlerFunction:
+  UpdateUserConvHandlerHandlerFunction:
     Description: Update User Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - UpdateUserLibHandlerHandlerFunction
+      - UpdateUserConvHandlerHandlerFunction
       - Arn
-  DeleteUserLibHandlerFunction:
+  DeleteUserConvHandlerFunction:
     Description: Delete User Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - DeleteUserLibHandlerFunction
+      - DeleteUserConvHandlerFunction
       - Arn
-  SendVerificationCodeLibHandlerFunction:
+  SendVerificationCodeConvHandlerFunction:
     Description: Resend Verification Code Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - SendVerificationCodeLibHandlerFunction
+      - SendVerificationCodeConvHandlerFunction
       - Arn
-  ForgotPasswordLibHandlerFunction:
+  ForgotPasswordConvHandlerFunction:
     Description: Forgot Password Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - ForgotPasswordLibHandlerFunction
+      - ForgotPasswordConvHandlerFunction
       - Arn
-  ConfirmForgotPasswordLibHandlerFunction:
+  ConfirmForgotPasswordConvHandlerFunction:
     Description: Confirm Forgot Password Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - ConfirmForgotPasswordLibHandlerFunction
+      - ConfirmForgotPasswordConvHandlerFunction
       - Arn
   UserPoolId:
     Description: User Pool ID

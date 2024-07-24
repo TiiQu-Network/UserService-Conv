@@ -15,9 +15,9 @@ Globals:
       - x86_64
     Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
       Variables:
-        COGNITO_POOL_APP_CLIENT_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QGb3lF2DT2M6xFqaSfvjBreAAAAeTB3BgkqhkiG9w0BBwagajBoAgEAMGMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMOYL253xNWq/cGMQmAgEQgDYcNAQ3tWC5TAy9Hs65Lq4Yn2+jACZlgGAAKJXQqp7H4h20vLFS3XAsSnavhiBfbpgBfG8lU8w=
-        COGNITO_POOL_APP_CLIENT_SECRET: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QEXr5UctUCk4SWsLmee24v3AAAAlTCBkgYJKoZIhvcNAQcGoIGEMIGBAgEAMHwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMHfsoWZi7Rv6soO5lAgEQgE//IYyFkzNto/NiuuYQGuEHLZ0jLNd8zpUK7519UN1Bx7TcPTH/dHt+eKOx2lL5bWTehVUSh/fCZodIW4hGaYsawmSkPrbLq+ubqb4yDi4U
-        COGNITO_USER_POOL_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QG8mTSaJUul5h5tXAhrnejqAAAAcjBwBgkqhkiG9w0BBwagYzBhAgEAMFwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMXpnC0vL5Pn044rFSAgEQgC91GoNd9dNSe4+doFBYq3h/WnMMF8RCOnzsyAf7CHBMj2IQmf1YqEOizyP9WJmXGg==
+        COGNITO_POOL_APP_CLIENT_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QFDwfhjXVwoX/nvmJ3SQDMnAAAAeDB2BgkqhkiG9w0BBwagaTBnAgEAMGIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMRV2Q/CSSL1dKV7BHAgEQgDVbh4CygboOqgjjNvSxBWvGKPXnKJseK8futhY1soD8E5e0hHoirQp4PlgX0yjxdBq+nu4Dqg==
+        COGNITO_POOL_APP_CLIENT_SECRET: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QGC8MGrAiu6Hob/xoB6XW4QAAAAljCBkwYJKoZIhvcNAQcGoIGFMIGCAgEAMH0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMPm3IYIZYRZCZNrUcAgEQgFBQ96sJD3923jOl9OhLTGSgB4BxRNcZE61SMIdEHtwcOZcsXa4qqV/EXWHp92Q528dj1z0FbPfyzZoAULlWlSDSGIxQ0oidZZRGJFUQcF5s5A==
+        COGNITO_USER_POOL_ID: AQICAHiBGrtl37x374a4/EDnxTDXbiR3CI7yTyDT5A3MKW+p1QFOm+ggw+oNHHhoRH3NqAY4AAAAcjBwBgkqhkiG9w0BBwagYzBhAgEAMFwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMZxcm66ZkfcNCqb0QAgEQgC/2GjtIms3YYYYE9rtGff3o4MEntB2Im+beNaxBE/HyI0K04WS94HSK3zCMevR3Ww==
         COGNITO_USER_POOL_ADMIN_GROUP: Admins
         COGNITO_USER_POOL_USER_GROUP: Users
 
@@ -32,7 +32,7 @@ Resources:
   UserPool:
     Type: 'AWS::Cognito::UserPool'
     Properties:
-      UserPoolName: 'user-service-pool-lib'
+      UserPoolName: 'user-service-pool-conv'
       UsernameAttributes:
         - 'email'
       AutoVerifiedAttributes:
@@ -59,7 +59,7 @@ Resources:
   UserPoolClient:
     Type: 'AWS::Cognito::UserPoolClient'
     Properties:
-      ClientName: 'user-service-pool-lib-client'
+      ClientName: 'user-service-pool-conv-client'
       UserPoolId: !Ref UserPool
       ExplicitAuthFlows:
         - 'ALLOW_USER_PASSWORD_AUTH'
@@ -107,11 +107,11 @@ Resources:
 #        client_secret: '' # Update with your Google Client Secret
 #        authorize_scopes: 'openid email profile'
 
-  UserServiceLibApi:
+  UserServiceConvApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: UserServiceLibApi
-      StageName: Prod
+      Name: UserServiceConvApi
+      StageName: Dev
       TracingEnabled: true
 #      Cors:
 #        AllowMethods: 'GET,POST,OPTIONS'
@@ -140,7 +140,7 @@ Resources:
 #      ContentType: "application/json"
 #      Description: "Model for user input validation"
 #      Name: "UserModel"
-#      RestApiId: !Ref UserServiceLibApi
+#      RestApiId: !Ref UserServiceConvApi
 #      Schema:
 #        type: "object"
 #        properties:
@@ -167,11 +167,11 @@ Resources:
 #  RequestValidator:
 #    Type: AWS::ApiGateway::RequestValidator
 #    Properties:
-#      RestApiId: !Ref UserServiceLibApi
+#      RestApiId: !Ref UserServiceConvApi
 #      ValidateRequestBody: true
 #      ValidateRequestParameters: true
 
-  SignupUserLibHandlerFunction:
+  SignupUserConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -182,50 +182,50 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:AdminAddUserToGroup'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        CreateUser:
+        CreateConvUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/signup
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
 #            RequestModel:
 #              "application/json": !Ref UserModel
             Auth:
               Authorizer: NONE
-  ConfirmUserLibHandlerFunction:
+  ConfirmUserConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
       Handler: com.qutii.users.ConfirmUserHandler::handleRequest
       Events:
-        ConfirmUser:
+        ConfirmConvUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/confirm
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
-  LoginUserLibHandlerFunction:
+  LoginUserConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
       Handler: com.qutii.users.LoginUserHandler::handleRequest
       Events:
-        LoginUser:
+        LoginConvUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/login
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
-  AddUserToGroupLibHandlerFunction:
+  AddUserToGroupConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -236,18 +236,18 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:AdminAddUserToGroup'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        AddUserToGroup:
+        AddConvUserToGroup:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/add-to-group
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
-  RemoveUserFromGroupLibHandlerFunction:
+  RemoveUserFromGroupConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -258,36 +258,36 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:AdminRemoveUserFromGroup'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        RemoveUserFromGroup:
+        RemoveConvUserFromGroup:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/remove-from-group
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
-  GetUserLibHandlerFunction:
+  GetUserConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
       Handler: com.qutii.users.GetUserHandler::handleRequest
       Events:
-        GetUser:
+        GetConvUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/me
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
               - method.request.header.AccessToken:
                   Required: true
             Auth:
               Authorizer: CognitoAuthorizer
-  UpdateUserLibHandlerHandlerFunction:
+  UpdateUserConvHandlerHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -298,21 +298,21 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:AdminUpdateUserAttributes'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        RemoveUserFromGroup:
+        RemoveConvUserFromGroup:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/me
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
               - method.request.header.AccessToken:
                   Required: true
             Auth:
               Authorizer: CognitoAuthorizer
-  DeleteUserLibHandlerFunction:
+  DeleteUserConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -323,21 +323,21 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:AdminDeleteUser'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        DeleteUser:
+        DeleteConvUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/me/delete
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             RequestParameters:
               - method.request.header.AccessToken:
                   Required: true
             Auth:
               Authorizer: CognitoAuthorizer
-  SendVerificationCodeLibHandlerFunction:
+  SendVerificationCodeConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -348,18 +348,18 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:ResendConfirmationCode'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        ReSendVerificationCode:
+        ReSendConvVerificationCode:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/send-verification-code
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
-  ForgotPasswordLibHandlerFunction:
+  ForgotPasswordConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -370,18 +370,18 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:ForgotPassword'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        ForgotPassword:
+        ForgotConvPassword:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/forgot-password
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
-  ConfirmForgotPasswordLibHandlerFunction:
+  ConfirmForgotPasswordConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -392,18 +392,18 @@ Resources:
             - Effect: Allow
               Action:
                 - 'cognito-idp:ConfirmForgotPassword'
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        ConfirmForgotPassword:
+        ConfirmConvForgotPassword:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/confirm-forgot-password
             Method: post
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: NONE
-  GetUsersLibHandlerFunction:
+  GetUsersConvHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: UserService
@@ -414,15 +414,15 @@ Resources:
             - Effect: Allow
               Action:
                 - cognito-idp:ListUsers
-              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_1JTzhVi38"
+              Resource: "arn:aws:cognito-idp:eu-west-2:109607957842:userpool/eu-west-2_sKgxMC604"
       Events:
-        GetUsers:
+        GetConvUsers:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/list
             Method: get
             RestApiId:
-              Ref: UserServiceLibApi
+              Ref: UserServiceConvApi
             Auth:
               Authorizer: CognitoAuthorizer
 
@@ -445,48 +445,48 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  UserServiceLibApi:
+  UserServiceConvApi:
     Description: API Gateway endpoint URL for Prod stage for User Service function
-    Value: !Sub "https://${UserServiceLibApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users"
-  SignupUserLibHandlerFunction:
+    Value: !Sub "https://${UserServiceConvApi}.execute-api.${AWS::Region}.amazonaws.com/Dev/users"
+  SignupUserConvHandlerFunction:
     Description: Signup Users Lambda Function ARN
-    Value: !GetAtt SignupUserLibHandlerFunction.Arn
-  SignupUserLibHandlerFunctionIamRole:
+    Value: !GetAtt SignupUserConvHandlerFunction.Arn
+  SignupUserConvHandlerFunctionIamRole:
     Description: Implicit IAM Role created for Signup function
-    Value: !GetAtt SignupUserLibHandlerFunctionRole.Arn
-  ConfirmUserLibHandlerFunction:
+    Value: !GetAtt SignupUserConvHandlerFunctionRole.Arn
+  ConfirmUserConvHandlerFunction:
     Description: Confirm User Lambda Function ARN
-    Value: !GetAtt ConfirmUserLibHandlerFunction.Arn
-  LoginUserLibHandlerFunction:
+    Value: !GetAtt ConfirmUserConvHandlerFunction.Arn
+  LoginUserConvHandlerFunction:
     Description: Login User Lambda Function ARN
-    Value: !GetAtt LoginUserLibHandlerFunction.Arn
-  AddUserToGroupLibHandlerFunction:
+    Value: !GetAtt LoginUserConvHandlerFunction.Arn
+  AddUserToGroupConvHandlerFunction:
     Description: Add User to Group Lambda Function ARN
-    Value: !GetAtt AddUserToGroupLibHandlerFunction.Arn
-  RemoveUserFromGroupLibHandlerFunction:
+    Value: !GetAtt AddUserToGroupConvHandlerFunction.Arn
+  RemoveUserFromGroupConvHandlerFunction:
     Description: Remove User from Group Lambda Function ARN
-    Value: !GetAtt RemoveUserFromGroupLibHandlerFunction.Arn
-  GetUserLibHandlerFunction:
+    Value: !GetAtt RemoveUserFromGroupConvHandlerFunction.Arn
+  GetUserConvHandlerFunction:
     Description: Get User Lambda Function ARN
-    Value: !GetAtt GetUserLibHandlerFunction.Arn
-  GetUsersLibHandlerFunction:
+    Value: !GetAtt GetUserConvHandlerFunction.Arn
+  GetUsersConvHandlerFunction:
     Description: Get Users Lambda Function ARN
-    Value: !GetAtt GetUsersLibHandlerFunction.Arn
-  UpdateUserLibHandlerHandlerFunction:
+    Value: !GetAtt GetUsersConvHandlerFunction.Arn
+  UpdateUserConvHandlerHandlerFunction:
     Description: Update User Lambda Function ARN
-    Value: !GetAtt UpdateUserLibHandlerHandlerFunction.Arn
-  DeleteUserLibHandlerFunction:
+    Value: !GetAtt UpdateUserConvHandlerHandlerFunction.Arn
+  DeleteUserConvHandlerFunction:
     Description: Delete User Lambda Function ARN
-    Value: !GetAtt DeleteUserLibHandlerFunction.Arn
-  SendVerificationCodeLibHandlerFunction:
+    Value: !GetAtt DeleteUserConvHandlerFunction.Arn
+  SendVerificationCodeConvHandlerFunction:
     Description: Resend Verification Code Lambda Function ARN
-    Value: !GetAtt SendVerificationCodeLibHandlerFunction.Arn
-  ForgotPasswordLibHandlerFunction:
+    Value: !GetAtt SendVerificationCodeConvHandlerFunction.Arn
+  ForgotPasswordConvHandlerFunction:
     Description: Forgot Password Lambda Function ARN
-    Value: !GetAtt ForgotPasswordLibHandlerFunction.Arn
-  ConfirmForgotPasswordLibHandlerFunction:
+    Value: !GetAtt ForgotPasswordConvHandlerFunction.Arn
+  ConfirmForgotPasswordConvHandlerFunction:
     Description: Confirm Forgot Password Lambda Function ARN
-    Value: !GetAtt ConfirmForgotPasswordLibHandlerFunction.Arn
+    Value: !GetAtt ConfirmForgotPasswordConvHandlerFunction.Arn
   UserPoolId:
     Description: 'User Pool ID'
     Value: !Ref UserPool

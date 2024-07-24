@@ -17,10 +17,10 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "user-service-lib"
+s3_prefix = "userservice-conv"
 region = "eu-west-2"
 image_repositories = []
-stack_name = "user-service-lib"
+stack_name = "userservice-conv"
 
 [default.package.parameters]
 resolve_s3 = true
